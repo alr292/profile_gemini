@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What's Cookin' Ruiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --red-light: #E74C3C;
+      --black: #0D0D0D; --charcoal: #1A1A1A; --gray: #2C2C2C;
+      --light-gray: #B0B0B0; --white: #F5F5F5;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); line-height: 1.7; min-height: 100vh; }
+
+    header { background: rgba(13,13,13,0.95); border-bottom: 1px solid var(--red-dark); padding: 1rem 3rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--red-light); letter-spacing: 2px; }
+    .back-link { color: var(--light-gray); text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+    .back-link:hover { color: var(--red-light); }
+
+    .hero { text-align: center; padding: 5rem 2rem 3rem; background: linear-gradient(135deg, var(--black) 60%, #1a0505 100%); border-bottom: 2px solid var(--red-dark); }
+    .hero-tag { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red-light); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 6rem); line-height: 1; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--red-light); }
+    .hero p { color: var(--light-gray); font-size: 1rem; font-weight: 300; max-width: 480px; margin: 0 auto; }
+
+    .main { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+
+    .input-label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red-light); margin-bottom: 0.75rem; display: block; }
+    .tag-input-area { background: var(--charcoal); border: 1px solid var(--gray); padding: 0.75rem 1rem; min-height: 56px; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; cursor: text; transition: border-color 0.2s; margin-bottom: 0.5rem; }
+    .tag-input-area:focus-within { border-color: var(--red); }
+    .tag { background: var(--red-dark); color: var(--white); padding: 0.2rem 0.6rem; font-size: 0.82rem; display: flex; align-items: center; gap: 6px; }
+    .tag-remove { cursor: pointer; color: var(--red-light); font-size: 1rem; line-height: 1; }
+    .tag-remove:hover { color: var(--white); }
+    #ingredient-input { background: transparent; border: none; outline: none; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; flex: 1; min-width: 140px; }
+    #ingredient-input::placeholder { color: var(--light-gray); }
+
+    .hint { font-size: 0.78rem; color: var(--light-gray); margin-bottom: 1.5rem; }
+
+    .surprise-btn { background: transparent; border: 1px solid var(--gray); color: var(--light-gray); padding: 0.6rem 1.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; display: block; margin: 0 auto 2rem; }
+    .surprise-btn:hover { border-color: var(--red); color: var(--red-light); }
+
+    .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+    .filter-group label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red-light); display: block; margin-bottom: 0.5rem; }
+    select { width: 100%; background: var(--charcoal); border: 1px solid var(--gray); color: var(--white); padding: 0.6rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; cursor: pointer; transition: border-color 0.2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B0B0B0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    select:focus { border-color: var(--red); }
+
+    .generate-btn { width: 100%; padding: 1rem; background: var(--red); color: var(--white); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; cursor: pointer; transition: background 0.2s, transform 0.15s; margin-bottom: 2.5rem; }
+    .generate-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+    .no-results { background: var(--charcoal); border-left: 3px solid var(--gray); padding: 1.5rem; color: var(--light-gray); font-size: 0.9rem; display: none; }
+
+    .results { display: none; }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+    .results-label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red-light); }
+    .results-count { font-size: 0.8rem; color: var(--light-gray); }
+
+    .recipe-card { background: var(--charcoal); border-left: 3px solid var(--red); padding: 1.75rem; margin-bottom: 1.25rem; animation: fadeIn 0.35s ease forwards; opacity: 0; cursor: pointer; transition: border-color 0.2s; }
+    .recipe-card:hover { border-color: var(--red-light); }
+    .recipe-card.open { border-color: var(--red-light); }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .recipe-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .recipe-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--white); line-height: 1.1; }
+    .recipe-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; flex-shrink: 0; }
+    .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; letter-spacing: 1px; text-transform: uppercase; }
+    .badge-time { background: var(--gray); color: var(--light-gray); }
+    .badge-budget { background: #1a2e1a; color: #6dbf6d; }
+    .badge-cuisine { background: #1a1a2e; color: #6d8dbf; }
+    .badge-match { background: var(--red-dark); color: var(--white); }
+
+    .recipe-desc { color: var(--light-gray); font-size: 0.9rem; font-weight: 300; margin: 0.75rem 0 0; }
+
+    .recipe-details { display: none; margin-top: 1.25rem; border-top: 1px solid var(--gray); padding-top: 1.25rem; }
+    .recipe-card.open .recipe-details { display: block; }
+
+    .recipe-section-title { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red-light); margin-bottom: 0.5rem; }
+    .ingredients-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+    .ingredient-chip { background: var(--gray); color: var(--light-gray); padding: 0.2rem 0.7rem; font-size: 0.8rem; }
+    .ingredient-chip.matched { background: var(--red-dark); color: var(--white); }
+    .steps-list { list-style: none; padding: 0; }
+    .steps-list li { font-size: 0.88rem; color: var(--light-gray); font-weight: 300; padding: 0.3rem 0; display: flex; gap: 0.75rem; }
+    .step-num { color: var(--red-light); font-weight: 500; flex-shrink: 0; min-width: 18px; }
+
+    .expand-hint { font-size: 0.75rem; color: var(--light-gray); margin-top: 0.75rem; opacity: 0.6; }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--gray); font-size: 0.8rem; color: var(--light-gray); margin-top: 2rem; }
+
+    @media (max-width: 600px) {
+      header { padding: 1rem 1.25rem; }
+      .main { padding: 2rem 1.25rem; }
+      .filters { grid-template-columns: 1fr; }
+      .recipe-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">What's Cookin' Ruiz</div>
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+</header>
+
+<div class="hero">
+  <p class="hero-tag">Recipe Finder</p>
+  <h1>What's in your<br/><span>kitchen?</span></h1>
+  <p>Enter ingredients you have on hand and get recipe ideas instantly — no account needed.</p>
+</div>
+
+<div class="main">
+  <div style="margin-bottom: 1.5rem;">
+    <label class="input-label">Your Ingredients</label>
+    <div class="tag-input-area" id="tag-area">
+      <input type="text" id="ingredient-input" placeholder="Type an ingredient and press Enter..."/>
+    </div>
+    <p class="hint">Press Enter or comma after each ingredient</p>
+  </div>
+
+  <button class="surprise-btn" id="surprise-btn">🎲 Surprise me with random ingredients</button>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label>Budget</label>
+      <select id="budget-filter">
+        <option value="any">Any budget</option>
+        <option value="low">Under $10</option>
+        <option value="mid">Under $20</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Cook Time</label>
+      <select id="time-filter">
+        <option value="any">Any time</option>
+        <option value="quick">Under 30 min</option>
+        <option value="medium">Under 1 hour</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="generate-btn">Find My Recipes</button>
+
+  <div class="no-results" id="no-results">
+    No recipes found matching your filters. Try different ingredients or loosen your budget/time filters.
+  </div>
+
+  <div class="results" id="results">
+    <div class="results-header">
+      <p class="results-label">Recipes for you</p>
+      <p class="results-count" id="results-count"></p>
+    </div>
+    <div id="recipe-list"></div>
+  </div>
+</div>
+
+<footer>
+  <p>What's Cookin' Ruiz &nbsp;·&nbsp; Built by Aaron L. Ruiz &nbsp;·&nbsp; <a href="index.html" style="color: var(--red-light); text-decoration: none;">Back to Portfolio</a></p>
+</footer>
+
+<script>
+const RECIPES = [
+  {
+    name: "Garlic Butter Chicken",
+    description: "Juicy pan-seared chicken in a rich garlic butter sauce — ready in under 30 minutes.",
+    cuisine: "American", time: 25, budget: 8,
+    ingredients: ["chicken", "butter", "garlic", "lemon", "parsley", "salt", "pepper", "olive oil"],
+    steps: ["Season chicken with salt and pepper on both sides.", "Heat olive oil in a skillet over medium-high heat.", "Sear chicken 6-7 minutes per side until golden and cooked through.", "Remove chicken and melt butter in the same pan.", "Add garlic and cook 1 minute, then squeeze in lemon juice.", "Pour sauce over chicken and garnish with parsley."]
+  },
+  {
+    name: "Spaghetti Carbonara",
+    description: "Classic creamy Italian pasta made with eggs, bacon, and parmesan — no heavy cream needed.",
+    cuisine: "Italian", time: 20, budget: 9,
+    ingredients: ["pasta", "spaghetti", "bacon", "eggs", "parmesan", "garlic", "black pepper", "salt"],
+    steps: ["Cook spaghetti in salted boiling water until al dente.", "Fry bacon with garlic until crispy, then remove from heat.", "Whisk eggs with grated parmesan and black pepper.", "Drain pasta, reserving 1 cup pasta water.", "Toss hot pasta with bacon, then quickly stir in egg mixture.", "Add pasta water slowly to create a creamy sauce."]
+  },
+  {
+    name: "Black Bean Rice Bowl",
+    description: "A hearty and budget-friendly Latin-inspired bowl loaded with flavor.",
+    cuisine: "Latin", time: 20, budget: 6,
+    ingredients: ["rice", "black beans", "cumin", "lime", "garlic", "onion", "cilantro", "salt", "olive oil"],
+    steps: ["Cook rice according to package instructions.", "Sauté onion and garlic in olive oil until soft.", "Add black beans, cumin, and salt — cook 5 minutes.", "Squeeze lime juice over beans and stir in cilantro.", "Serve beans over rice with extra lime on the side."]
+  },
+  {
+    name: "Honey Garlic Salmon",
+    description: "Sweet and savory glazed salmon ready in 15 minutes — a weeknight staple.",
+    cuisine: "Asian-Inspired", time: 15, budget: 14,
+    ingredients: ["salmon", "honey", "soy sauce", "garlic", "ginger", "butter", "lemon"],
+    steps: ["Mix honey, soy sauce, minced garlic, and ginger in a bowl.", "Pat salmon dry and season with salt and pepper.", "Heat butter in a pan over medium-high heat.", "Cook salmon 4 minutes per side until flaky.", "Pour sauce over salmon in the last 2 minutes of cooking.", "Serve with a squeeze of lemon."]
+  },
+  {
+    name: "Spinach Feta Omelette",
+    description: "A protein-packed breakfast or quick dinner with Mediterranean flair.",
+    cuisine: "Mediterranean", time: 10, budget: 5,
+    ingredients: ["eggs", "spinach", "feta", "butter", "garlic", "salt", "pepper", "tomato"],
+    steps: ["Whisk eggs with salt and pepper.", "Melt butter in a non-stick pan over medium heat.", "Sauté garlic and spinach until wilted, about 2 minutes.", "Pour in eggs and let set on the bottom for 1 minute.", "Add feta and diced tomato to one side.", "Fold omelette in half and serve immediately."]
+  },
+  {
+    name: "Ground Beef Tacos",
+    description: "Quick and satisfying tacos with seasoned beef — a crowd-pleaser every time.",
+    cuisine: "Mexican", time: 20, budget: 10,
+    ingredients: ["ground beef", "taco shells", "onion", "garlic", "cumin", "chili powder", "cheese", "tomato", "lettuce", "lime"],
+    steps: ["Brown ground beef in a skillet over medium-high heat.", "Add diced onion and garlic, cook until soft.", "Season with cumin, chili powder, salt, and pepper.", "Simmer on low for 5 minutes.", "Warm taco shells in oven at 350°F for 3 minutes.", "Fill shells with beef and top with cheese, tomato, lettuce, and lime."]
+  },
+  {
+    name: "Tomato Basil Pasta",
+    description: "Simple, fresh, and incredibly flavorful — a 20-minute Italian classic.",
+    cuisine: "Italian", time: 20, budget: 7,
+    ingredients: ["pasta", "tomato", "garlic", "basil", "olive oil", "parmesan", "salt", "pepper"],
+    steps: ["Cook pasta in salted boiling water until al dente.", "Sauté garlic in olive oil over medium heat for 1 minute.", "Add diced tomatoes and cook 8 minutes until saucy.", "Season with salt, pepper, and fresh basil.", "Toss with drained pasta and a splash of pasta water.", "Top with grated parmesan and more basil."]
+  },
+  {
+    name: "Chicken Fried Rice",
+    description: "Better than takeout — use leftover rice for the best results.",
+    cuisine: "Asian", time: 25, budget: 8,
+    ingredients: ["rice", "chicken", "eggs", "soy sauce", "garlic", "onion", "peas", "carrots", "sesame oil", "ginger"],
+    steps: ["Cook and dice chicken, set aside.", "Scramble eggs in a hot wok and set aside.", "Stir-fry garlic, onion, peas, and carrots for 3 minutes.", "Add cold cooked rice and press into the pan.", "Stir in chicken, eggs, soy sauce, and sesame oil.", "Toss everything together and cook 2 more minutes."]
+  },
+  {
+    name: "Avocado Toast with Egg",
+    description: "The ultimate quick breakfast — creamy avocado, crispy toast, and a perfect egg.",
+    cuisine: "American", time: 10, budget: 5,
+    ingredients: ["avocado", "eggs", "bread", "lemon", "salt", "pepper", "red pepper flakes", "butter"],
+    steps: ["Toast bread until golden and crispy.", "Mash avocado with lemon juice, salt, and pepper.", "Fry egg in butter to your liking — sunny side up works great.", "Spread avocado on toast.", "Top with egg and sprinkle red pepper flakes."]
+  },
+  {
+    name: "Beef Stir Fry",
+    description: "Quick, high-heat stir fry with tender beef and crisp vegetables.",
+    cuisine: "Asian", time: 20, budget: 12,
+    ingredients: ["beef", "broccoli", "soy sauce", "garlic", "ginger", "sesame oil", "onion", "bell pepper", "cornstarch"],
+    steps: ["Slice beef thin and toss with soy sauce and cornstarch.", "Heat oil in wok on high heat until smoking.", "Sear beef quickly in batches, 2 minutes each, set aside.", "Stir-fry broccoli, bell pepper, and onion 3 minutes.", "Add garlic and ginger, cook 30 seconds.", "Return beef, add soy sauce and sesame oil, toss and serve."]
+  },
+  {
+    name: "Shakshuka",
+    description: "Eggs poached in a spiced tomato sauce — a bold and satisfying one-pan meal.",
+    cuisine: "Middle Eastern", time: 25, budget: 6,
+    ingredients: ["eggs", "tomato", "onion", "garlic", "bell pepper", "cumin", "paprika", "olive oil", "feta", "parsley"],
+    steps: ["Sauté onion and bell pepper in olive oil until soft.", "Add garlic, cumin, and paprika — cook 1 minute.", "Pour in crushed tomatoes and simmer 10 minutes.", "Make wells in the sauce and crack in eggs.", "Cover and cook until egg whites are set, about 5-7 minutes.", "Top with crumbled feta and fresh parsley."]
+  },
+  {
+    name: "Chicken Quesadillas",
+    description: "Crispy, cheesy quesadillas with seasoned chicken — done in 15 minutes.",
+    cuisine: "Mexican", time: 15, budget: 8,
+    ingredients: ["chicken", "tortillas", "cheese", "bell pepper", "onion", "cumin", "garlic", "sour cream", "salsa"],
+    steps: ["Cook and shred chicken with cumin, garlic, salt, and pepper.", "Sauté bell pepper and onion until soft.", "Place tortilla in dry pan over medium heat.", "Add cheese, chicken, and veggies to one half.", "Fold tortilla over and cook 2-3 minutes per side until golden.", "Serve with sour cream and salsa."]
+  },
+  {
+    name: "Lemon Herb Shrimp",
+    description: "Garlicky, buttery shrimp with fresh herbs — perfect over rice or pasta.",
+    cuisine: "Mediterranean", time: 15, budget: 13,
+    ingredients: ["shrimp", "butter", "garlic", "lemon", "parsley", "red pepper flakes", "salt", "olive oil"],
+    steps: ["Pat shrimp dry and season with salt and red pepper flakes.", "Heat olive oil and butter in a large skillet.", "Add garlic and cook 30 seconds until fragrant.", "Add shrimp in a single layer and cook 2 minutes per side.", "Squeeze lemon juice over shrimp and toss.", "Garnish with fresh parsley and serve immediately."]
+  },
+  {
+    name: "Veggie Omelette",
+    description: "A fluffy, filling omelette loaded with fresh vegetables.",
+    cuisine: "American", time: 10, budget: 4,
+    ingredients: ["eggs", "bell pepper", "onion", "mushrooms", "cheese", "butter", "salt", "pepper", "spinach"],
+    steps: ["Whisk 3 eggs with salt and pepper.", "Sauté mushrooms, bell pepper, and onion in butter for 3 minutes.", "Add spinach and cook until wilted.", "Pour eggs into pan and let set on the bottom.", "Add veggies and cheese to one half.", "Fold and slide onto plate, serve immediately."]
+  },
+  {
+    name: "Pesto Pasta",
+    description: "Bright and herby pesto pasta that comes together in under 20 minutes.",
+    cuisine: "Italian", time: 20, budget: 9,
+    ingredients: ["pasta", "basil", "parmesan", "garlic", "pine nuts", "olive oil", "lemon", "salt", "pepper"],
+    steps: ["Cook pasta in salted water until al dente.", "Blend basil, garlic, pine nuts, parmesan, and olive oil into a paste.", "Season pesto with lemon juice, salt, and pepper.", "Reserve 1/2 cup pasta water before draining.", "Toss hot pasta with pesto, adding pasta water to loosen.", "Serve with extra parmesan on top."]
+  },
+  {
+    name: "Loaded Nachos",
+    description: "Crispy chips piled high with melted cheese, beans, and all the toppings.",
+    cuisine: "Mexican", time: 15, budget: 8,
+    ingredients: ["tortilla chips", "cheese", "black beans", "jalapeño", "sour cream", "salsa", "avocado", "onion", "tomato"],
+    steps: ["Preheat oven to 400°F.", "Spread chips in a single layer on a baking sheet.", "Top with black beans and shredded cheese.", "Bake 8-10 minutes until cheese is melted and bubbly.", "Top with diced tomato, onion, and jalapeño.", "Serve with sour cream, salsa, and sliced avocado."]
+  },
+  {
+    name: "Banana Pancakes",
+    description: "Fluffy, naturally sweet pancakes — a perfect weekend breakfast.",
+    cuisine: "American", time: 20, budget: 4,
+    ingredients: ["banana", "eggs", "flour", "milk", "butter", "baking powder", "vanilla", "sugar", "salt"],
+    steps: ["Mash bananas in a large bowl.", "Whisk in eggs, milk, melted butter, and vanilla.", "Add flour, baking powder, sugar, and salt — stir until just combined.", "Heat buttered pan over medium heat.", "Pour 1/4 cup batter per pancake and cook until bubbles form.", "Flip and cook 1 more minute until golden."]
+  },
+  {
+    name: "Chicken Noodle Soup",
+    description: "Comforting homemade chicken noodle soup — perfect for any day.",
+    cuisine: "American", time: 40, budget: 10,
+    ingredients: ["chicken", "noodles", "carrots", "celery", "onion", "garlic", "chicken broth", "parsley", "salt", "pepper", "butter"],
+    steps: ["Sauté onion, carrots, and celery in butter until soft.", "Add garlic and cook 1 minute.", "Pour in chicken broth and bring to a boil.", "Add chicken breasts and cook 15 minutes until done.", "Remove chicken, shred it, and return to pot.", "Add noodles and cook until tender, season and garnish with parsley."]
+  },
+  {
+    name: "Grilled Cheese & Tomato Soup",
+    description: "The ultimate comfort combo — a golden grilled cheese with creamy tomato soup.",
+    cuisine: "American", time: 25, budget: 6,
+    ingredients: ["bread", "cheese", "butter", "tomato", "onion", "garlic", "cream", "basil", "salt", "pepper"],
+    steps: ["Sauté onion and garlic in butter until soft.", "Add tomatoes and cook 10 minutes until broken down.", "Blend until smooth and stir in cream, basil, salt, and pepper.", "Butter both sides of bread and place cheese in the middle.", "Cook sandwich in a pan over medium heat 3 minutes per side.", "Serve golden grilled cheese alongside hot soup."]
+  },
+  {
+    name: "Teriyaki Chicken Bowl",
+    description: "Sweet and savory teriyaki chicken served over steamed rice.",
+    cuisine: "Japanese", time: 25, budget: 10,
+    ingredients: ["chicken", "soy sauce", "honey", "garlic", "ginger", "rice", "sesame oil", "sesame seeds", "green onion"],
+    steps: ["Mix soy sauce, honey, garlic, and ginger for the teriyaki sauce.", "Cook rice according to package directions.", "Slice chicken and cook in sesame oil over medium-high heat.", "Pour teriyaki sauce over chicken and simmer 5 minutes until thick.", "Serve chicken over rice.", "Garnish with sesame seeds and sliced green onion."]
+  }
+];
+
+const surpriseSets = [
+  ["chicken", "garlic", "butter", "lemon"],
+  ["salmon", "soy sauce", "honey", "ginger"],
+  ["eggs", "spinach", "feta", "tomato"],
+  ["pasta", "bacon", "parmesan", "eggs"],
+  ["rice", "black beans", "cumin", "lime"],
+  ["ground beef", "onion", "cheese", "tortillas"],
+];
+
+const ingredients = [];
+const input = document.getElementById('ingredient-input');
+const tagArea = document.getElementById('tag-area');
+
+function addIngredient(val) {
+  const clean = val.trim().toLowerCase().replace(/,/g, '');
+  if (!clean || ingredients.includes(clean)) return;
+  ingredients.push(clean);
+  const tag = document.createElement('div');
+  tag.className = 'tag';
+  tag.innerHTML = `${clean} <span class="tag-remove" data-val="${clean}">&times;</span>`;
+  tagArea.insertBefore(tag, input);
+}
+
+function removeIngredient(val) {
+  const idx = ingredients.indexOf(val);
+  if (idx > -1) ingredients.splice(idx, 1);
+  tagArea.querySelectorAll('.tag').forEach(t => { if (t.querySelector(`[data-val="${val}"]`)) t.remove(); });
+}
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addIngredient(input.value); input.value = ''; }
+  else if (e.key === 'Backspace' && input.value === '' && ingredients.length > 0) removeIngredient(ingredients[ingredients.length - 1]);
+});
+input.addEventListener('blur', () => { if (input.value.trim()) { addIngredient(input.value); input.value = ''; } });
+tagArea.addEventListener('click', e => {
+  if (e.target.classList.contains('tag-remove')) removeIngredient(e.target.dataset.val);
+  else input.focus();
+});
+
+document.getElementById('surprise-btn').addEventListener('click', () => {
+  ingredients.length = 0;
+  tagArea.querySelectorAll('.tag').forEach(t => t.remove());
+  const pick = surpriseSets[Math.floor(Math.random() * surpriseSets.length)];
+  pick.forEach(addIngredient);
+});
+
+document.getElementById('generate-btn').addEventListener('click', () => {
+  const budget = document.getElementById('budget-filter').value;
+  const time = document.getElementById('time-filter').value;
+  const noResults = document.getElementById('no-results');
+  const results = document.getElementById('results');
+  const recipeList = document.getElementById('recipe-list');
+
+  if (ingredients.length === 0) {
+    noResults.style.display = 'block';
+    noResults.textContent = 'Add at least one ingredient to get started!';
+    results.style.display = 'none';
+    return;
+  }
+
+  const scored = RECIPES.map(r => {
+    const matched = ingredients.filter(ing => r.ingredients.some(ri => ri.includes(ing) || ing.includes(ri)));
+    return { ...r, matched, score: matched.length };
+  }).filter(r => r.score > 0);
+
+  const filtered = scored.filter(r => {
+    if (budget === 'low' && r.budget > 10) return false;
+    if (budget === 'mid' && r.budget > 20) return false;
+    if (time === 'quick' && r.time > 30) return false;
+    if (time === 'medium' && r.time > 60) return false;
+    return true;
+  });
+
+  filtered.sort((a, b) => b.score - a.score);
+
+  noResults.style.display = 'none';
+  recipeList.innerHTML = '';
+
+  if (filtered.length === 0) {
+    noResults.style.display = 'block';
+    noResults.textContent = 'No recipes found with those filters. Try loosening your budget or cook time.';
+    results.style.display = 'none';
+    return;
+  }
+
+  document.getElementById('results-count').textContent = `${filtered.length} recipe${filtered.length !== 1 ? 's' : ''} found`;
+
+  filtered.forEach((r, i) => {
+    const extra = r.ingredients.filter(ri => !r.matched.some(m => ri.includes(m) || m.includes(ri)));
+    const card = document.createElement('div');
+    card.className = 'recipe-card';
+    card.style.animationDelay = `${i * 0.08}s`;
+
+    const matchedChips = r.matched.map(m => `<span class="ingredient-chip matched">${m}</span>`).join('');
+    const extraChips = extra.slice(0, 5).map(e => `<span class="ingredient-chip">${e}</span>`).join('');
+    const steps = r.steps.map((s, idx) => `<li><span class="step-num">${idx + 1}.</span>${s}</li>`).join('');
+    const matchPct = Math.round((r.score / r.ingredients.length) * 100);
+
+    card.innerHTML = `
+      <div class="recipe-header">
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-badges">
+          <span class="badge badge-time">${r.time} min</span>
+          <span class="badge badge-budget">~$${r.budget}</span>
+          <span class="badge badge-cuisine">${r.cuisine}</span>
+          <span class="badge badge-match">${r.score} match${r.score !== 1 ? 'es' : ''}</span>
+        </div>
+      </div>
+      <p class="recipe-desc">${r.description}</p>
+      <p class="expand-hint">Click to see ingredients & steps</p>
+      <div class="recipe-details">
+        <p class="recipe-section-title" style="margin-bottom: 0.5rem;">You have (${matchPct}% match)</p>
+        <div class="ingredients-list">${matchedChips}${extraChips}</div>
+        <p class="recipe-section-title">Steps</p>
+        <ol class="steps-list">${steps}</ol>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      card.classList.toggle('open');
+      card.querySelector('.expand-hint').style.display = card.classList.contains('open') ? 'none' : 'block';
+    });
+
+    recipeList.appendChild(card);
+  });
+
+  results.style.display = 'block';
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>
