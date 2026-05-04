@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aaron L. Ruiz | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #C0392B; --red-dark: #922B21; --red-light: #E74C3C;
+      --black: #0D0D0D; --charcoal: #1A1A1A; --gray: #2C2C2C;
+      --light-gray: #B0B0B0; --white: #F5F5F5;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); line-height: 1.7; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(13,13,13,0.95); border-bottom: 1px solid var(--red-dark);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 3rem; z-index: 100; backdrop-filter: blur(6px);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--red-light); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--light-gray); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--red-light); }
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      padding: 0 3rem; background: linear-gradient(135deg, var(--black) 60%, #1a0505 100%);
+      border-bottom: 2px solid var(--red-dark); position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -80px; right: -80px; width: 400px; height: 400px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 70%); pointer-events: none;
+    }
+    .hero-tag { font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red-light); margin-bottom: 1rem; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 10vw, 8rem); color: var(--white); line-height: 0.95; margin-bottom: 1.5rem; }
+    .hero h1 span { color: var(--red-light); }
+    .hero p { max-width: 560px; color: var(--light-gray); font-size: 1.05rem; font-weight: 300; margin-bottom: 2rem; }
+    .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-btn { display: inline-block; padding: 0.75rem 2rem; background: var(--red); color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.2s, transform 0.15s; }
+    .hero-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .hero-btn.outline { background: transparent; border: 1px solid var(--red); color: var(--red-light); }
+    .hero-btn.outline:hover { background: var(--red-dark); color: var(--white); }
+    section { padding: 6rem 3rem; max-width: 1000px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red-light); margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--white); margin-bottom: 2.5rem; border-bottom: 2px solid var(--red-dark); padding-bottom: 0.75rem; }
+    .edu-card { background: var(--charcoal); border-left: 3px solid var(--red); padding: 1.5rem 1.75rem; margin-bottom: 1.25rem; }
+    .edu-card h3 { font-size: 1.1rem; font-weight: 500; color: var(--white); margin-bottom: 0.25rem; }
+    .edu-card .school { color: var(--red-light); font-size: 0.95rem; font-weight: 400; margin-bottom: 0.25rem; }
+    .edu-card .meta { font-size: 0.85rem; color: var(--light-gray); margin-bottom: 0.5rem; }
+    .edu-card ul { list-style: none; padding: 0; margin-top: 0.5rem; }
+    .edu-card ul li { font-size: 0.85rem; color: var(--light-gray); padding: 0.15rem 0; }
+    .edu-card ul li::before { content: '— '; color: var(--red-light); }
+    .exp-card { display: grid; grid-template-columns: 150px 1fr; gap: 0 2rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--gray); }
+    .exp-card:last-child { border-bottom: none; }
+    .exp-date { color: var(--red-light); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.5px; padding-top: 3px; }
+    .exp-content h3 { font-size: 1.05rem; font-weight: 500; color: var(--white); margin-bottom: 0.15rem; }
+    .exp-content .company { font-size: 0.85rem; color: var(--light-gray); margin-bottom: 0.75rem; }
+    .exp-content ul { list-style: none; padding: 0; }
+    .exp-content ul li { font-size: 0.88rem; color: var(--light-gray); font-weight: 300; padding: 0.2rem 0; }
+    .exp-content ul li::before { content: '→ '; color: var(--red-light); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .skill-category { background: var(--charcoal); padding: 1.5rem; }
+    .skill-category h3 { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red-light); margin-bottom: 1rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag { background: var(--gray); color: var(--light-gray); padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; }
+    .contact-item { background: var(--charcoal); padding: 1.5rem; border-top: 2px solid var(--red); }
+    .contact-item .c-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red-light); margin-bottom: 0.4rem; }
+    .contact-item .c-value { font-size: 0.95rem; color: var(--white); }
+    .contact-item a { color: var(--white); text-decoration: none; transition: color 0.2s; }
+    .contact-item a:hover { color: var(--red-light); }
+    .involvement-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .involvement-tag { background: var(--charcoal); border: 1px solid var(--red-dark); color: var(--light-gray); padding: 0.4rem 1rem; font-size: 0.85rem; }
+    footer { background: var(--charcoal); border-top: 1px solid var(--red-dark); text-align: center; padding: 2rem; font-size: 0.8rem; color: var(--light-gray); }
+    .divider { border: none; border-top: 1px solid var(--gray); margin: 0; }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; } .nav-logo { font-size: 1.3rem; } .nav-links { gap: 1rem; }
+      .hero { padding: 0 1.25rem; } section { padding: 4rem 1.25rem; }
+      .exp-card { grid-template-columns: 1fr; gap: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Aaron L. Ruiz</div>
+    <ul class="nav-links">
+      <li><a href="#education">Education</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+  <img src="assets/headshot.JPEG" alt="Aaron L. Ruiz" style="
+  position: absolute;
+  right: 6rem;
+  bottom: 0;
+  height: 75vh;
+  max-height: 650px;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0.85;
+  mask-image: linear-gradient(to top, transparent 0%, black 20%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%);
+"/>
+    <p class="hero-tag">Rutgers Business School · Accounting · Class of 2027</p>
+    <h1>Aaron<br/><span>L. Ruiz</span></h1>
+    <p>Accounting student at Rutgers Business School with a 3.5 GPA, Dean's List honoree, and Rising Leaders Award recipient. Experienced in operations, community leadership, and campus involvement.</p>
+    <div class="hero-links">
+      <a href="#experience" class="hero-btn">View Experience</a>
+      <a href="https://www.linkedin.com/in/aaron-ruiz-rutgersuniversity/" target="_blank" class="hero-btn outline">LinkedIn</a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <section id="education">
+    <p class="section-label">Background</p>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-card">
+      <h3>Bachelor of Science, Accounting</h3>
+      <p class="school">Rutgers Business School — Rutgers, The State University of New Jersey</p>
+      <p class="meta">New Brunswick, NJ &nbsp;·&nbsp; Expected May 2027 &nbsp;·&nbsp; GPA: 3.5</p>
+      <ul>
+        <li>Dean's List — Fall 2023, Fall 2024</li>
+        <li>Rising Leaders Award</li>
+      </ul>
+    </div>
+    <div class="edu-card">
+      <h3>Relevant Coursework</h3>
+      <p class="school">Financial Accounting · Microeconomics · Management · Marketing · Statistics · Business Writing · Practical Finance · Computer Applications</p>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="experience">
+    <p class="section-label">Career & Leadership</p>
+    <h2 class="section-title">Experience</h2>
+
+    <div class="exp-card">
+      <p class="exp-date">Mar 2024 – Present</p>
+      <div class="exp-content">
+        <h3>Order Fulfillment Associate</h3>
+        <p class="company">Home Depot &nbsp;·&nbsp; Colonia, NJ</p>
+        <ul>
+          <li>Fulfilled and staged 200+ weekly customer pickup orders with a 95% accuracy rate</li>
+          <li>Guided an average of 25 customers per shift, helping maintain a top-tier customer satisfaction rating</li>
+          <li>Collaborated with a team of 5 associates to process 200+ weekly orders, contributing to faster turnaround</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <p class="exp-date">Nov 2024 – Present</p>
+      <div class="exp-content">
+        <h3>President</h3>
+        <p class="company">Delta Chi Fraternity &nbsp;·&nbsp; Rutgers University</p>
+        <ul>
+          <li>Leads a team of 12 executive board members and oversees a fraternity of 40+ members</li>
+          <li>Oversees an $18,000 annual budget, reducing costs by 10% through strategic vendor negotiations</li>
+          <li>Holds philanthropic and fundraising events, raising $1,500+ annually for the Jimmy V Foundation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <p class="exp-date">Sep 2024 – Present</p>
+      <div class="exp-content">
+        <h3>Ru4Kids Liaison</h3>
+        <p class="company">Ru4Kids &nbsp;·&nbsp; Rutgers University</p>
+        <ul>
+          <li>Coordinated 2–5 events and maintained consistent communication to aid families in need</li>
+          <li>Facilitated 3–5 weekly interactions, fostering trust between families and student organizations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <p class="exp-date">Apr 2024 – Nov 2024</p>
+      <div class="exp-content">
+        <h3>Recruitment Chair</h3>
+        <p class="company">Delta Chi Fraternity &nbsp;·&nbsp; Rutgers University</p>
+        <ul>
+          <li>Led recruitment by reaching out to 300+ potential members and promoting Delta Chi</li>
+          <li>Organized events to attract new members and increased membership by 30%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <p class="exp-date">Dec 2019 – Present</p>
+      <div class="exp-content">
+        <h3>Event Coordinator</h3>
+        <p class="company">Colonia Corner Organization &nbsp;·&nbsp; Colonia, NJ</p>
+        <ul>
+          <li>Guided an average of 20 community members per shift with inquiries, donations, and event participation</li>
+          <li>Resolved on-site challenges ensuring smooth experiences at 7+ events annually</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="skills">
+    <p class="section-label">Capabilities</p>
+    <h2 class="section-title">Skills & Involvement</h2>
+
+    <div class="skills-grid" style="margin-bottom: 2.5rem;">
+      <div class="skill-category">
+        <h3>Technical</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Microsoft Excel</span>
+          <span class="skill-tag">Microsoft Word</span>
+          <span class="skill-tag">PowerPoint</span>
+          <span class="skill-tag">Google Suite</span>
+          <span class="skill-tag">Adobe Photoshop</span>
+          <span class="skill-tag">HTML</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Accounting</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Financial Accounting</span>
+          <span class="skill-tag">Budgeting</span>
+          <span class="skill-tag">Financial Reporting</span>
+          <span class="skill-tag">Cost Reduction</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Leadership</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Team Management</span>
+          <span class="skill-tag">Event Planning</span>
+          <span class="skill-tag">Fundraising</span>
+          <span class="skill-tag">Recruitment</span>
+          <span class="skill-tag">Community Outreach</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label" style="margin-bottom: 1rem;">Campus Involvement</p>
+    <div class="involvement-list">
+      <span class="involvement-tag">RUAA — Rutgers University Accounting Association</span>
+      <span class="involvement-tag">Unified Sports</span>
+      <span class="involvement-tag">Personal Finance Club</span>
+      <span class="involvement-tag">ALPFA</span>
+      <span class="involvement-tag">LIBOR</span>
+      <span class="involvement-tag">Delta Chi Fraternity</span>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="contact">
+    <p class="section-label">Get In Touch</p>
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <p class="c-label">Email</p>
+        <p class="c-value"><a href="mailto:aaron.ruiz@rutgers.edu">aaron.ruiz@rutgers.edu</a></p>
+      </div>
+      <div class="contact-item">
+        <p class="c-label">LinkedIn</p>
+        <p class="c-value"><a href="https://www.linkedin.com/in/aaron-ruiz-rutgersuniversity/" target="_blank">aaron-ruiz-rutgersuniversity</a></p>
+      </div>
+      <div class="contact-item">
+        <p class="c-label">Phone</p>
+        <p class="c-value">(908) 451-2576</p>
+      </div>
+      <div class="contact-item">
+        <p class="c-label">Location</p>
+        <p class="c-value">Colonia, NJ 07067</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Aaron L. Ruiz &nbsp;·&nbsp; Rutgers Business School</p>
+  </footer>
+
+</body>
+</html>
